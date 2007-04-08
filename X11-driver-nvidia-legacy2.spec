@@ -69,6 +69,7 @@ Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
 Provides:	XFree86-OpenGL-libGL
 Obsoletes:	Mesa
+Obsoletes:	Mesa-libGL
 Obsoletes:	X11-OpenGL-core
 Obsoletes:	X11-OpenGL-libGL
 Obsoletes:	XFree86-OpenGL-core
