@@ -14,7 +14,7 @@
 %define		_nv_ver		1.0
 %define		_nv_rel		9631
 %define		_min_x11	6.7.0
-%define		_rel		51
+%define		_rel		52
 #
 %define		need_x86	0
 %define		need_x8664	0
