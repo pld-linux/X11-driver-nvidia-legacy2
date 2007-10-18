@@ -11,8 +11,7 @@
 %define	alt_kernel	grsecurity
 %endif
 #
-%define		_nv_ver		1.0
-%define		_nv_rel		9639
+%define		_nv_ver		96.43.01
 %define		_min_x11	6.7.0
 %define		_rel	55
 #
@@ -34,18 +33,18 @@
 Summary:	Linux Drivers for NVIDIA GeForce/Quadro Chips
 Summary(pl):	Sterowniki do kart graficznych NVIDIA GeForce/Quadro
 Name:		X11-driver-nvidia-legacy2
-Version:	%{_nv_ver}.%{_nv_rel}
+Version:	%{_nv_ver}
 Release:	%{_rel}
 License:	nVidia Binary
 Group:		X11
 # why not pkg0!?
 %if %{need_x86}
-Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source0-md5:	b277a5a05f6e8e4e0cd388ea9203e4f5
+Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{_nv_ver}/NVIDIA-Linux-x86-%{_nv_ver}-pkg1.run
+# Source0-md5:	66f8b5e243aad22162e40d0f05f0bf1e
 %endif
 %if %{need_x8664}
-Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}-%{_nv_rel}/NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1.run
-# Source1-md5:	60293af0dde33f186257f723bb2da845
+Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{_nv_ver}/NVIDIA-Linux-x86_64-%{_nv_ver}-pkg1.run
+# Source1-md5:	1cb134675bbdce8e172a0edc78618ed3
 %endif
 Source2:	%{name}-settings.desktop
 Source3:	%{name}-xinitrc.sh
@@ -144,7 +143,7 @@ Narzêdzia do zarz±dzania kartami graficznymi nVidia.
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl):	Modu³ j±dra dla obs³ugi kart graficznych nVidia
-Version:	%{_nv_ver}.%{_nv_rel}
+Version:	%{_nv_ver}
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -187,13 +186,13 @@ przez sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
-rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-%{_nv_rel}-pkg*
+rm -rf NVIDIA-Linux-x86*-%{_nv_ver}-pkg*
 %ifarch %{ix86}
 /bin/sh %{SOURCE0} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86-%{_nv_ver}-pkg1
 %else
 /bin/sh %{SOURCE1} --extract-only
-%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-%{_nv_rel}-pkg1
+%setup -qDT -n NVIDIA-Linux-x86_64-%{_nv_ver}-pkg1
 %endif
 %patch0 -p1
 #%patch1 -p1
