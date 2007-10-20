@@ -1,3 +1,4 @@
+#
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	up		# without up packages
@@ -35,7 +36,7 @@ URL:		http://www.nvidia.com/object/unix.html
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
 %endif
 BuildRequires:	%{kgcc_package}
-BuildRequires:	rpmbuild(macros) >= 1.308
+BuildRequires:	rpmbuild(macros) >= 1.330
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	X11-Xserver
@@ -179,35 +180,13 @@ sed -i 's:-Wpointer-arith::' usr/src/nv/Makefile.kbuild
 %if %{with kernel}
 cd usr/src/nv/
 ln -sf Makefile.kbuild Makefile
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-	fi
-	rm -rf o
-	install -d o/include/linux
-	ln -sf %{_kernelsrcdir}/config-$cfg o/.config
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg o/Module.symvers
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h o/include/linux/autoconf.h
-%if %{with dist_kernel}
-	%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-%else
-	touch o/include/config/MARKER
-	ln -sf %{_kernelsrcdir}/scripts o/scripts
-%endif
-	%{__make} -C %{_kernelsrcdir} clean \
-		RCS_FIND_IGNORE="-name '*.ko' -o -name nv-kernel.o -o" \
-		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD/o \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	%{__make} -C %{_kernelsrcdir} modules \
-		CC="%{__cc}" CPP="%{__cpp}" \
-		SYSSRC=%{_kernelsrcdir} \
-		SYSOUT=$PWD/o \
-		M=$PWD O=$PWD/o \
-		%{?with_verbose:V=1}
-	mv nvidia.ko nvidia-$cfg.ko
-done
+cat >> Makefile <<'EOF'
+
+$(obj)/nv-kernel.o: $(src)/nv-kernel.o.bin
+	cp $< $@
+EOF
+mv nv-kernel.o{,.bin}
+%build_kernel_modules -m nvidia
 %endif
 
 %install
@@ -245,14 +224,7 @@ ln -sf %{_libdir}/libGL.so $RPM_BUILD_ROOT/usr/%{_lib}/libGL.so
 %endif
 
 %if %{with kernel}
-cd usr/src/nv/
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
-install nvidia-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/nvidia.ko
-%if %{with smp} && %{with dist_kernel}
-install nvidia-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/nvidia.ko
-%endif
+%install_kernel_modules -m usr/src/nv/nvidia -d misc
 %endif
 
 %clean
