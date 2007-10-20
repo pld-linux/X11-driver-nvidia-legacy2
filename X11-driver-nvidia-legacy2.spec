@@ -194,13 +194,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT%{_libdir}/modules/{drivers,extensions} \
-	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib}/tls,%{_bindir}} \
+	$RPM_BUILD_ROOT{/usr/include/GL,/usr/%{_lib}/tls,%{_bindir},%{_mandir}/man1} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir},/etc/X11/xinit/xinitrc.d}
 
 ln -sf $RPM_BUILD_ROOT%{_libdir} $RPM_BUILD_ROOT%{_prefix}/../lib
 
 install usr/bin/nvidia-settings $RPM_BUILD_ROOT%{_bindir}
+install usr/bin/nvidia-xconfig $RPM_BUILD_ROOT%{_bindir}
 install usr/share/pixmaps/nvidia-settings.png $RPM_BUILD_ROOT%{_pixmapsdir}
+install usr/share/man/man1/nvidia-[sx]* $RPM_BUILD_ROOT%{_mandir}/man1
 install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}/nvidia-settings.desktop
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/nvidia-settings.sh
 install usr/lib/libnvidia-tls.so.%{version} $RPM_BUILD_ROOT/usr/%{_lib}
@@ -300,7 +302,9 @@ EOF
 %defattr(644,root,root,755)
 %doc usr/share/doc/nvidia-settings-user-guide.txt
 %attr(755,root,root) %{_bindir}/nvidia-settings
+%attr(755,root,root) %{_bindir}/nvidia-xconfig
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
-%{_desktopdir}/*
+%{_desktopdir}/*.desktop
+%{_mandir}/man1/*
 %{_pixmapsdir}/*
 %endif
