@@ -14,7 +14,7 @@
 #
 %define		_nv_ver		96.43.01
 %define		_min_x11	6.7.0
-%define		_rel	55
+%define		_rel	56
 #
 
 Summary:	Linux Drivers for NVIDIA GeForce/Quadro Chips
