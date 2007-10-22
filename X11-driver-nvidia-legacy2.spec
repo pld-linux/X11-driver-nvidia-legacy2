@@ -8,6 +8,10 @@
 %bcond_with	verbose		# verbose build (V=1)
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
 #
+%if %{without kernel}
+%undefine	with_dist_kernel
+%endif
+#
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
 %endif
@@ -34,9 +38,9 @@ Patch0:		%{name}-GL.patch
 URL:		http://www.nvidia.com/object/unix.html
 %if %{with kernel}
 %{?with_dist_kernel:BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.7}
-%endif
 BuildRequires:	%{kgcc_package}
 BuildRequires:	rpmbuild(macros) >= 1.330
+%endif
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	X11-Xserver
