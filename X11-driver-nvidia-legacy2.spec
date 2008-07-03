@@ -1,8 +1,6 @@
 #
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
-%bcond_without	up		# without up packages
-%bcond_without	smp		# without smp packages
 %bcond_without	kernel		# without kernel packages
 %bcond_without	userspace	# don't build userspace programs
 %bcond_with	verbose		# verbose build (V=1)
@@ -13,22 +11,24 @@
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
-
-%define		_min_x11	6.7.0
-#
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+%endif
 
 %define		pname	X11-driver-nvidia-legacy2
+%define		rel	1
 Summary:	Linux Drivers for NVIDIA GeForce/Quadro Chips
 Summary(pl.UTF-8):	Sterowniki do kart graficznych NVIDIA GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
-Version:	96.43.01
-Release:	63
+Version:	96.43.05
+Release:	%{rel}
 License:	nVidia Binary
 Group:		X11
 Source0:	http://download.nvidia.com/XFree86/Linux-x86/%{version}/NVIDIA-Linux-x86-%{version}-pkg1.run
-# Source0-md5:	66f8b5e243aad22162e40d0f05f0bf1e
+# Source0-md5:	addf2d2187e94885f1d5e7b6907202ff
 Source1:	http://download.nvidia.com/XFree86/Linux-x86_64/%{version}/NVIDIA-Linux-x86_64-%{version}-pkg1.run
-# Source1-md5:	1cb134675bbdce8e172a0edc78618ed3
+# Source1-md5:	81a504bfddf36c6e93612635ed03f28f
 Source2:	%{pname}-settings.desktop
 Source3:	%{pname}-xinitrc.sh
 Patch0:		%{pname}-GL.patch
@@ -41,8 +41,8 @@ BuildRequires:	rpmbuild(macros) >= 1.330
 BuildRequires:	sed >= 4.0
 BuildConflicts:	XFree86-nvidia
 Requires:	X11-Xserver
-Requires:	X11-libs >= %{_min_x11}
-Requires:	X11-modules >= %{_min_x11}
+Requires:	X11-libs >= 6.7.0
+Requires:	X11-modules >= 6.7.0
 Provides:	X11-OpenGL-core
 Provides:	X11-OpenGL-libGL
 Provides:	XFree86-OpenGL-core
@@ -123,12 +123,13 @@ Narzędzia do zarządzania kartami graficznymi nVidia.
 Summary:	nVidia kernel module for nVidia Architecture support
 Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
 Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
 %{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
-Provides:	X11-driver-nvidia-legacy2(kernel)
 Obsoletes:	XFree86-nvidia-kernel
+Obsoletes:	kernel%{_alt_kernel}-smp-video-nvidia-legacy2
 
 %description -n kernel%{_alt_kernel}-video-nvidia-legacy2
 nVidia Architecture support for Linux kernel.
@@ -139,27 +140,6 @@ Die nVidia-Architektur-Unterstützung für den Linux-Kern.
 %description -n kernel%{_alt_kernel}-video-nvidia-legacy2 -l pl.UTF-8
 Obsługa architektury nVidia dla jądra Linuksa. Pakiet wymagany przez
 sterownik nVidii dla Xorg/XFree86.
-
-%package -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
-Summary:	nVidia kernel module for nVidia Architecture support
-Summary(de.UTF-8):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
-Summary(pl.UTF-8):	Moduł jądra dla obsługi kart graficznych nVidia
-Group:		Base/Kernel
-Requires(post,postun):	/sbin/depmod
-Requires:	dev >= 2.7.7-10
-%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
-Provides:	X11-driver-nvidia-legacy2(kernel)
-Obsoletes:	XFree86-nvidia-kernel
-
-%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
-nVidia Architecture support for Linux kernel SMP.
-
-%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l de.UTF-8
-Die nVidia-Architektur-Unterstützung für den Linux-Kern SMP.
-
-%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l pl.UTF-8
-Obsługa architektury nVidia dla jądra Linuksa SMP. Pakiet wymagany
-przez sterownik nVidii dla Xorg/XFree86.
 
 %prep
 cd %{_builddir}
@@ -238,7 +218,7 @@ cat << EOF
  *                                                     *
  *  NOTE:                                              *
  *  You must install:                                  *
- *  kernel(24)(-smp)-video-nvidia-legacy2-%{version}     *
+ *  kernel-video-nvidia-legacy2-%{version}     *
  *  for this driver to work                            *
  *                                                     *
  *******************************************************
@@ -252,12 +232,6 @@ EOF
 
 %postun	-n kernel%{_alt_kernel}-video-nvidia-legacy2
 %depmod %{_kernel_ver}
-
-%post	-n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
-%depmod %{_kernel_ver}smp
-
-%postun	-n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
-%depmod %{_kernel_ver}smp
 
 %if %{with userspace}
 %files
@@ -278,17 +252,9 @@ EOF
 %endif
 
 %if %{with kernel}
-%if %{with up} || %{without dist_kernel}
 %files -n kernel%{_alt_kernel}-video-nvidia-legacy2
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/*.ko*
-%endif
-
-%if %{with smp} && %{with dist_kernel}
-%files -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/misc/*.ko*
-%endif
 %endif
 
 %if %{with userspace}
