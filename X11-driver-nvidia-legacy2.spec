@@ -19,7 +19,7 @@
 
 %define		pname	X11-driver-nvidia-legacy2
 Summary:	Linux Drivers for NVIDIA GeForce/Quadro Chips
-Summary(pl):	Sterowniki do kart graficznych NVIDIA GeForce/Quadro
+Summary(pl.UTF-8):	Sterowniki do kart graficznych NVIDIA GeForce/Quadro
 Name:		%{pname}%{_alt_kernel}
 Version:	96.43.01
 Release:	63
@@ -78,20 +78,20 @@ The older graphics chips are unsupported:
 - TNT/TNT2/GeForce 256/GeForce2 Ultra/Quadro2 are suported by -legacy
   drivers.
 
-%description -l pl
+%description -l pl.UTF-8
 Usprawnione sterowniki dla kart graficznych NVIDIA do serwera Xorg,
-daj±ce wysokowydajn± akceleracjê OpenGL, obs³ugê AGP i wielu monitorów
-2D. Obs³uguj± w miarê nowe karty NVIDIA GeForce (od wersji GeForce2
+dajÄ…ce wysokowydajnÄ… akceleracjÄ™ OpenGL, obsÅ‚ugÄ™ AGP i wielu monitorÃ³w
+2D. ObsÅ‚ugujÄ… w miarÄ™ nowe karty NVIDIA GeForce (od wersji GeForce2
 MX) oraz Quadro (od wersji Quadro4) do serwera Xorg/XFree86.
 
-Starsze uk³ady graficzne NVIDIA nie s± obs³ugiwane przez ten pakiet:
-- NV1 i Riva 128/128ZX s± obs³ugiwane przez sterownik nv z Xorg.
-- TNT/TNT2/GeForce 256/GeForce2 Ultra/Quadro2 obs³ugiwane s± przez
+Starsze ukÅ‚ady graficzne NVIDIA nie sÄ… obsÅ‚ugiwane przez ten pakiet:
+- NV1 i Riva 128/128ZX sÄ… obsÅ‚ugiwane przez sterownik nv z Xorg.
+- TNT/TNT2/GeForce 256/GeForce2 Ultra/Quadro2 obsÅ‚ugiwane sÄ… przez
   sterownik NVIDIA w wersji -legacy.
 
 %package devel
 Summary:	OpenGL for X11R6 development (only gl?.h)
-Summary(pl):	Pliki nag³ówkowe OpenGL dla systemu X11R6 (tylko gl?.h)
+Summary(pl.UTF-8):	Pliki nagÅ‚Ã³wkowe OpenGL dla systemu X11R6 (tylko gl?.h)
 Group:		X11/Development/Libraries
 Requires:	%{pname} = %{version}-%{release}
 Provides:	OpenGL-devel-base
@@ -102,13 +102,13 @@ Conflicts:	XFree86-OpenGL-devel < 4.3.99.902-0.3
 %description devel
 Base headers (only gl?.h) for OpenGL for X11R6 for nvidia drivers.
 
-%description devel -l pl
-Podstawowe pliki nag³ówkowe (tylko gl?.h) OpenGL dla systemu X11R6 dla
-sterowników nvidii.
+%description devel -l pl.UTF-8
+Podstawowe pliki nagÅ‚Ã³wkowe (tylko gl?.h) OpenGL dla systemu X11R6 dla
+sterownikÃ³w nvidii.
 
 %package progs
 Summary:	Tools for advanced control of nVidia graphic cards
-Summary(pl):	Narzêdzia do zarz±dzania kartami graficznymi nVidia
+Summary(pl.UTF-8):	NarzÄ™dzia do zarzÄ…dzania kartami graficznymi nVidia
 Group:		Applications/System
 Requires:	%{pname} = %{version}-%{release}
 Obsoletes:	XFree86-driver-nvidia-progs
@@ -116,13 +116,13 @@ Obsoletes:	XFree86-driver-nvidia-progs
 %description progs
 Tools for advanced control of nVidia graphic cards.
 
-%description progs -l pl
-Narzêdzia do zarz±dzania kartami graficznymi nVidia.
+%description progs -l pl.UTF-8
+NarzÄ™dzia do zarzÄ…dzania kartami graficznymi nVidia.
 
 %package -n kernel%{_alt_kernel}-video-nvidia-legacy2
 Summary:	nVidia kernel module for nVidia Architecture support
-Summary(de):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
-Summary(pl):	Modu³ j±dra dla obs³ugi kart graficznych nVidia
+Summary(de.UTF-8):	Das nVidia-Kern-Modul fÃ¼r die nVidia-Architektur-UnterstÃ¼tzung
+Summary(pl.UTF-8):	ModuÅ‚ jÄ…dra dla obsÅ‚ugi kart graficznych nVidia
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
@@ -133,17 +133,17 @@ Obsoletes:	XFree86-nvidia-kernel
 %description -n kernel%{_alt_kernel}-video-nvidia-legacy2
 nVidia Architecture support for Linux kernel.
 
-%description -n kernel%{_alt_kernel}-video-nvidia-legacy2 -l de
-Die nVidia-Architektur-Unterstützung für den Linux-Kern.
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy2 -l de.UTF-8
+Die nVidia-Architektur-UnterstÃ¼tzung fÃ¼r den Linux-Kern.
 
-%description -n kernel%{_alt_kernel}-video-nvidia-legacy2 -l pl
-Obs³uga architektury nVidia dla j±dra Linuksa. Pakiet wymagany przez
+%description -n kernel%{_alt_kernel}-video-nvidia-legacy2 -l pl.UTF-8
+ObsÅ‚uga architektury nVidia dla jÄ…dra Linuksa. Pakiet wymagany przez
 sterownik nVidii dla Xorg/XFree86.
 
 %package -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
 Summary:	nVidia kernel module for nVidia Architecture support
-Summary(de):	Das nVidia-Kern-Modul für die nVidia-Architektur-Unterstützung
-Summary(pl):	Modu³ j±dra dla obs³ugi kart graficznych nVidia
+Summary(de.UTF-8):	Das nVidia-Kern-Modul fÃ¼r die nVidia-Architektur-UnterstÃ¼tzung
+Summary(pl.UTF-8):	ModuÅ‚ jÄ…dra dla obsÅ‚ugi kart graficznych nVidia
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 Requires:	dev >= 2.7.7-10
@@ -154,11 +154,11 @@ Obsoletes:	XFree86-nvidia-kernel
 %description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2
 nVidia Architecture support for Linux kernel SMP.
 
-%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l de
-Die nVidia-Architektur-Unterstützung für den Linux-Kern SMP.
+%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l de.UTF-8
+Die nVidia-Architektur-UnterstÃ¼tzung fÃ¼r den Linux-Kern SMP.
 
-%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l pl
-Obs³uga architektury nVidia dla j±dra Linuksa SMP. Pakiet wymagany
+%description -n kernel%{_alt_kernel}-smp-video-nvidia-legacy2 -l pl.UTF-8
+ObsÅ‚uga architektury nVidia dla jÄ…dra Linuksa SMP. Pakiet wymagany
 przez sterownik nVidii dla Xorg/XFree86.
 
 %prep
